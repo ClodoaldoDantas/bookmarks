@@ -12,18 +12,19 @@ import Button from '../components/Button.vue'
       <Logo />
 
       <form>
+        <Field type="text" placeholder="Nome" />
         <Field type="text" placeholder="E-mail" />
         <Field type="password" placeholder="Senha" />
 
         <Button type="submit">
           <LogIn :size="20" />
-          Entrar na sua conta
+          Crie sua conta agora
         </Button>
       </form>
 
       <p class="link">
-        Não tem uma conta?
-        <router-link to="/signup">Crie uma agora</router-link>
+        Já tem uma conta?
+        <router-link to="/">Conecte-se</router-link>
       </p>
     </div>
   </main>

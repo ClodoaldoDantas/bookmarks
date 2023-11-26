@@ -37,7 +37,7 @@ import MenuLink from './MenuLink.vue'
 
 <style lang="scss" scoped>
 .sidebar {
-  background-color: var(--sidebar);
+  background-color: var(--card);
   box-shadow: rgba(255, 255, 255, 0.05) -1px 0px 0px 0px inset;
 
   nav + nav {
