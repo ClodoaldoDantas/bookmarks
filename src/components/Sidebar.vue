@@ -1,75 +1,47 @@
 <script setup lang="ts">
 import { PlusCircle, LogOut } from 'lucide-vue-next'
+
+import Profile from './Profile.vue'
+import Menu from './Menu.vue'
+import MenuButton from './MenuButton.vue'
+import MenuLink from './MenuLink.vue'
 </script>
 
 <template>
   <aside class="sidebar">
-    <div class="profile">
-      <img src="https://github.com/clodoaldodantas.png" alt="" />
-      <span>Clodoaldo Dantas</span>
-    </div>
+    <Profile />
 
-    <nav class="navigation-actions">
-      <button type="button">
+    <Menu>
+      <MenuButton>
         <PlusCircle :size="18" />
-        <span>Nova Página</span>
-      </button>
+        Nova Página
+      </MenuButton>
 
-      <button type="button">
+      <MenuButton>
         <LogOut :size="18" />
-        <span>Sair da Conta</span>
-      </button>
-    </nav>
+        Sair da Conta
+      </MenuButton>
+    </Menu>
+
+    <Menu>
+      <MenuLink text="CSS" />
+      <MenuLink text="Javascript" />
+      <MenuLink text="Node" />
+      <MenuLink text="React JS" />
+      <MenuLink text="Next JS" />
+      <MenuLink text="Vue JS" />
+      <MenuLink text="Nuxt JS" />
+    </Menu>
   </aside>
 </template>
 
 <style lang="scss" scoped>
 .sidebar {
-  padding: 1rem;
   background-color: var(--sidebar);
   box-shadow: rgba(255, 255, 255, 0.05) -1px 0px 0px 0px inset;
-}
 
-.profile {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  img {
-    height: 2rem;
-    width: 2rem;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-
-  span {
-    font-size: 0.875rem;
-  }
-}
-
-.navigation-actions {
-  margin-top: 1rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-
-  button {
-    background: none;
-    border: none;
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    transition: color 200ms;
-
-    &:hover {
-      color: var(--text-primary);
-    }
+  nav + nav {
+    margin-top: 2rem;
   }
 }
 </style>
