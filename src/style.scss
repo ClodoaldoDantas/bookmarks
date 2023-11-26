@@ -1,0 +1,43 @@
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+:root {
+  --sidebar: #202020;
+  --background: #191919;
+  --text-primary: #fff;
+  --text-secondary: #9b9b9b;
+}
+
+body {
+  min-height: 100vh;
+
+  background-color: var(--background);
+  color: var(--text-primary);
+
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.5;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+}
