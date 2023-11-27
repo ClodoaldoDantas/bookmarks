@@ -1,9 +1,29 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { LogIn } from 'lucide-vue-next'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../lib/firebase'
+import { useRouter } from 'vue-router'
 
 import Logo from '../components/Logo.vue'
 import Field from '../components/Field.vue'
 import Button from '../components/Button.vue'
+
+const name = ref('')
+const email = ref('')
+const password = ref('')
+
+const router = useRouter()
+
+async function handleSubmit() {
+  try {
+    await createUserWithEmailAndPassword(auth, email.value, password.value)
+
+    router.push('/dashboard')
+  } catch (error) {
+    console.log(error)
+  }
+}
 </script>
 
 <template>
@@ -11,10 +31,15 @@ import Button from '../components/Button.vue'
     <div class="card">
       <Logo />
 
-      <form>
-        <Field type="text" placeholder="Nome" />
-        <Field type="text" placeholder="E-mail" />
-        <Field type="password" placeholder="Senha" />
+      <form @submit.prevent="handleSubmit()">
+        <Field type="text" placeholder="Nome" v-model="name" required />
+        <Field type="email" placeholder="E-mail" v-model="email" required />
+        <Field
+          type="password"
+          placeholder="Senha"
+          v-model="password"
+          required
+        />
 
         <Button type="submit">
           <LogIn :size="20" />

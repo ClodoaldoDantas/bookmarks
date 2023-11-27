@@ -1,5 +1,24 @@
+<script setup lang="ts">
+defineProps<{
+  modelValue: string
+}>()
+
+const emit = defineEmits<{
+  (event: 'update:modelValue', payload: string): void
+}>()
+
+const handleInput = (event: Event) => {
+  emit('update:modelValue', (event.target as HTMLInputElement).value)
+}
+</script>
+
 <template>
-  <input class="text-field" type="text" />
+  <input
+    class="text-field"
+    type="text"
+    :value="modelValue"
+    @input="handleInput"
+  />
 </template>
 
 <style lang="scss" scoped>
