@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import { LogIn } from 'lucide-vue-next'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth } from '../lib/firebase'
 import { useRouter } from 'vue-router'
 
@@ -9,15 +9,27 @@ import Logo from '../components/Logo.vue'
 import Field from '../components/Field.vue'
 import Button from '../components/Button.vue'
 
-const name = ref('')
-const email = ref('')
-const password = ref('')
+const state = reactive({
+  name: '',
+  email: '',
+  password: '',
+})
 
 const router = useRouter()
 
 async function handleSubmit() {
   try {
-    await createUserWithEmailAndPassword(auth, email.value, password.value)
+    const { name, email, password } = state
+
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    )
+
+    await updateProfile(userCredential.user, {
+      displayName: name,
+    })
 
     router.push('/dashboard')
   } catch (error) {
@@ -32,12 +44,17 @@ async function handleSubmit() {
       <Logo />
 
       <form @submit.prevent="handleSubmit()">
-        <Field type="text" placeholder="Nome" v-model="name" required />
-        <Field type="email" placeholder="E-mail" v-model="email" required />
+        <Field type="text" placeholder="Nome" v-model="state.name" required />
+        <Field
+          type="email"
+          placeholder="E-mail"
+          v-model="state.email"
+          required
+        />
         <Field
           type="password"
           placeholder="Senha"
-          v-model="password"
+          v-model="state.password"
           required
         />
 
