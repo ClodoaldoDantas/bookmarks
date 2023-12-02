@@ -23,7 +23,12 @@
 
   transition: all 200ms;
 
-  &:hover {
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &:not(:disabled):hover {
     background-color: var(--action-hover);
   }
 }

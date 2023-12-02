@@ -1,9 +1,38 @@
 <script setup lang="ts">
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { LogIn } from 'lucide-vue-next'
+
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../lib/firebase'
 
 import Logo from '../components/Logo.vue'
 import Field from '../components/Field.vue'
 import Button from '../components/Button.vue'
+
+const isLoading = ref(false)
+
+const state = reactive({
+  email: '',
+  password: '',
+})
+
+const router = useRouter()
+
+async function handleSubmit() {
+  isLoading.value = true
+
+  try {
+    const { email, password } = state
+    await signInWithEmailAndPassword(auth, email, password)
+
+    router.push('/dashboard')
+  } catch (error) {
+    console.log(error)
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
 
 <template>
@@ -11,11 +40,22 @@ import Button from '../components/Button.vue'
     <div class="card">
       <Logo />
 
-      <form>
-        <Field type="text" placeholder="E-mail" />
-        <Field type="password" placeholder="Senha" />
+      <form @submit.prevent="handleSubmit()">
+        <Field
+          type="text"
+          placeholder="E-mail"
+          v-model="state.email"
+          required
+        />
 
-        <Button type="submit">
+        <Field
+          type="password"
+          placeholder="Senha"
+          v-model="state.password"
+          required
+        />
+
+        <Button type="submit" :disabled="isLoading">
           <LogIn :size="20" />
           Entrar na sua conta
         </Button>
