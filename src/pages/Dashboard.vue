@@ -8,7 +8,13 @@ import Sidebar from '../components/Sidebar.vue'
     <Sidebar />
 
     <main class="content">
-      <!-- main content -->
+      <router-view></router-view>
     </main>
   </Layout>
 </template>
+
+<style lang="scss" scoped>
+.content {
+  padding: 1rem 2rem;
+}
+</style>

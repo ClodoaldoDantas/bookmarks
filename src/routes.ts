@@ -11,7 +11,19 @@ import { auth } from './lib/firebase'
 const routes = [
   { path: '/', component: Login },
   { path: '/signup', component: Register },
-  { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
+  {
+    path: '/dashboard',
+    component: Dashboard,
+    meta: {
+      requiresAuth: true,
+    },
+    children: [
+      {
+        path: ':folderId',
+        component: Links,
+      },
+    ],
+  },
 ]
 
 export const router = createRouter({
