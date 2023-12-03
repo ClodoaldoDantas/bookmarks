@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from './pages/Login.vue'
 import Register from './pages/Register.vue'
 import Dashboard from './pages/Dashboard.vue'
+import Links from './pages/Links.vue'
 
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from './lib/firebase'

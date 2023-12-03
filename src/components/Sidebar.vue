@@ -1,19 +1,29 @@
 <script setup lang="ts">
 import { FolderPlus, LogOut } from 'lucide-vue-next'
 import { signOut } from 'firebase/auth'
-import { auth } from '../lib/firebase'
 import { useRouter } from 'vue-router'
+import { addDoc, collection } from 'firebase/firestore'
+import { auth, db } from '../lib/firebase'
+import { useUser } from '../composables/useUser'
 
 import Profile from './Profile.vue'
 import Menu from './Menu.vue'
 import MenuButton from './MenuButton.vue'
-// import MenuLink from './MenuLink.vue'
+import FolderList from './FolderList.vue'
 
 const router = useRouter()
+const { user } = useUser()
 
 async function handleSignOut() {
   await signOut(auth)
   router.replace('/')
+}
+
+async function handleCreateFolder() {
+  await addDoc(collection(db, 'folders'), {
+    name: '(Nova Pasta)',
+    authorId: user.value?.uid,
+  })
 }
 </script>
 
@@ -27,21 +37,13 @@ async function handleSignOut() {
         Sair da Conta
       </MenuButton>
 
-      <MenuButton>
+      <MenuButton @click="handleCreateFolder()">
         <FolderPlus :size="18" />
         Nova Pasta
       </MenuButton>
     </Menu>
 
-    <!-- <Menu>
-      <MenuLink text="CSS" />
-      <MenuLink text="Javascript" />
-      <MenuLink text="Node" />
-      <MenuLink text="React JS" />
-      <MenuLink text="Next JS" />
-      <MenuLink text="Vue JS" />
-      <MenuLink text="Nuxt JS" />
-    </Menu> -->
+    <FolderList />
   </aside>
 </template>
 
