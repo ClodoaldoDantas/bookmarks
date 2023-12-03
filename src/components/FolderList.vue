@@ -9,8 +9,8 @@ import {
   where,
 } from 'firebase/firestore'
 
-import { useUser } from '../composables/useUser'
-import { db } from '../lib/firebase'
+import { useUser } from '@/composables/useUser'
+import { db } from '@/lib/firebase'
 
 import Menu from './Menu.vue'
 import FolderItem from './FolderItem.vue'

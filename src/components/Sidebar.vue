@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { FolderPlus, LogOut } from 'lucide-vue-next'
-import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
+
+import { signOut } from 'firebase/auth'
 import { Timestamp, addDoc, collection } from 'firebase/firestore'
-import { auth, db } from '../lib/firebase'
-import { useUser } from '../composables/useUser'
+
+import { auth, db } from '@/lib/firebase'
+import { useUser } from '@/composables/useUser'
 
 import Profile from './Profile.vue'
 import Menu from './Menu.vue'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UserCircle } from 'lucide-vue-next'
-import { useUser } from '../composables/useUser'
+import { useUser } from '@/composables/useUser'
 
 const { user } = useUser()
 </script>

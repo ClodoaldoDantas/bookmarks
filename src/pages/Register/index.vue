@@ -5,12 +5,12 @@ import { LogIn } from 'lucide-vue-next'
 
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
-import { auth } from '../lib/firebase'
-import { handleSignUpError } from '../utils/handler-auth-errors'
+import { auth } from '@/lib/firebase'
+import { handleSignUpError } from '@/utils/handler-auth-errors'
 
-import Logo from '../components/Logo.vue'
-import Field from '../components/Field.vue'
-import Button from '../components/Button.vue'
+import Logo from '@/components/Logo.vue'
+import Field from '@/components/Field.vue'
+import Button from '@/components/Button.vue'
 
 const isLoading = ref(false)
 
