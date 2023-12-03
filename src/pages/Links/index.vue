@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import LinksHeader from './LinksHeader.vue'
+</script>
+
 <template>
-  <p>Links: {{ $route.params.folderId }}</p>
+  <LinksHeader />
 </template>

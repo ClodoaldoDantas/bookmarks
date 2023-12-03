@@ -15,6 +15,6 @@ import Sidebar from '@/components/Sidebar.vue'
 
 <style lang="scss" scoped>
 .content {
-  padding: 1rem 2rem;
+  padding: 2rem;
 }
 </style>

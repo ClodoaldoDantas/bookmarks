@@ -11,15 +11,10 @@ import {
 
 import { useUser } from '@/composables/useUser'
 import { db } from '@/lib/firebase'
+import { Folder } from '@/interfaces/folder'
 
 import Menu from './Menu.vue'
 import FolderItem from './FolderItem.vue'
-
-interface Folder {
-  id: string
-  name: string
-  createdAt: Date
-}
 
 const { user } = useUser()
 const folders = ref<Folder[]>([])
