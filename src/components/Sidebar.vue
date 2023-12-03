@@ -2,7 +2,7 @@
 import { FolderPlus, LogOut } from 'lucide-vue-next'
 import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
-import { addDoc, collection } from 'firebase/firestore'
+import { Timestamp, addDoc, collection } from 'firebase/firestore'
 import { auth, db } from '../lib/firebase'
 import { useUser } from '../composables/useUser'
 
@@ -20,9 +20,16 @@ async function handleSignOut() {
 }
 
 async function handleCreateFolder() {
+  const folderName = prompt('Digite o nome da pasta:')
+
+  if (!folderName) {
+    return
+  }
+
   await addDoc(collection(db, 'folders'), {
-    name: '(Nova Pasta)',
+    name: folderName,
     authorId: user.value?.uid,
+    createdAt: Timestamp.fromDate(new Date()),
   })
 }
 </script>

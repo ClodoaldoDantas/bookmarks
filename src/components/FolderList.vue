@@ -1,38 +1,57 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import Menu from './Menu.vue'
-import FolderItem from './FolderItem.vue'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
+import {
+  Unsubscribe,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore'
 
 import { useUser } from '../composables/useUser'
-import { collection, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '../lib/firebase'
+
+import Menu from './Menu.vue'
+import FolderItem from './FolderItem.vue'
 
 interface Folder {
   id: string
   name: string
+  createdAt: Date
 }
 
 const { user } = useUser()
 const folders = ref<Folder[]>([])
 
+let unsubscribe: Unsubscribe | null = null
+
 onMounted(() => {
   const q = query(
     collection(db, 'folders'),
+    orderBy('createdAt', 'asc'),
     where('authorId', '==', user.value?.uid)
   )
 
-  onSnapshot(q, (querySnapshot) => {
+  unsubscribe = onSnapshot(q, (querySnapshot) => {
     const data: Folder[] = []
 
     querySnapshot.forEach((doc) => {
       data.push({
         id: doc.id,
         name: doc.data().name,
+        createdAt: doc.data().createdAt.toDate(),
       })
     })
 
     folders.value = data
   })
+})
+
+onBeforeUnmount(() => {
+  if (unsubscribe) {
+    unsubscribe()
+  }
 })
 </script>
 
