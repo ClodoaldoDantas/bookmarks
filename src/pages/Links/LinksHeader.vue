@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 
 import { Folder } from '@/interfaces/folder'
 import { db } from '@/lib/firebase'
@@ -13,6 +13,28 @@ const dateTimeOptions: any = {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
+}
+
+function handleKeyDown(event: Event) {
+  const target = event.target as HTMLInputElement
+  target.blur()
+}
+
+function handleBlur(event: Event) {
+  const target = event.target as HTMLInputElement
+
+  if (!target.innerText) {
+    target.innerText = folderData?.value?.name as string
+    return
+  }
+
+  if (target.innerText === folderData?.value?.name) {
+    return
+  }
+
+  const folderRef = doc(db, 'folders', folderData?.value?.id as string)
+
+  updateDoc(folderRef, { name: target.innerText })
 }
 
 async function fetchFolderData(folderId: string) {
@@ -45,7 +67,14 @@ onMounted(() => {
 
 <template>
   <header v-if="folderData" class="header">
-    <h1>{{ folderData.name }}</h1>
+    <h1
+      contenteditable="true"
+      @keydown.enter="handleKeyDown"
+      @blur="handleBlur"
+    >
+      {{ folderData.name }}
+    </h1>
+
     <span>
       Criado em
       {{ folderData.createdAt.toLocaleDateString('pt-BR', dateTimeOptions) }}
@@ -55,6 +84,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .header {
+  max-width: 400px;
+
   h1 {
     font-size: 1.25rem;
     font-weight: 600;
