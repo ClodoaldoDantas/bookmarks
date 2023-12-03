@@ -4,7 +4,9 @@ import { useRouter } from 'vue-router'
 import { LogIn } from 'lucide-vue-next'
 
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { FirebaseError } from 'firebase/app'
 import { auth } from '../lib/firebase'
+import { handleSignInError } from '../utils/handler-auth-errors'
 
 import Logo from '../components/Logo.vue'
 import Field from '../components/Field.vue'
@@ -28,7 +30,10 @@ async function handleSubmit() {
 
     router.push('/dashboard')
   } catch (error) {
-    console.log(error)
+    if (error instanceof FirebaseError) {
+      const errorMessage = handleSignInError(error.code)
+      alert(errorMessage)
+    }
   } finally {
     isLoading.value = false
   }

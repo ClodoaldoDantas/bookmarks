@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PlusCircle, LogOut } from 'lucide-vue-next'
+import { FolderPlus, LogOut } from 'lucide-vue-next'
 import { signOut } from 'firebase/auth'
 import { auth } from '../lib/firebase'
 import { useRouter } from 'vue-router'
@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router'
 import Profile from './Profile.vue'
 import Menu from './Menu.vue'
 import MenuButton from './MenuButton.vue'
-import MenuLink from './MenuLink.vue'
+// import MenuLink from './MenuLink.vue'
 
 const router = useRouter()
 
@@ -22,18 +22,18 @@ async function handleSignOut() {
     <Profile />
 
     <Menu>
-      <MenuButton>
-        <PlusCircle :size="18" />
-        Nova Página
-      </MenuButton>
-
       <MenuButton @click="handleSignOut()">
         <LogOut :size="18" />
         Sair da Conta
       </MenuButton>
+
+      <MenuButton>
+        <FolderPlus :size="18" />
+        Nova Pasta
+      </MenuButton>
     </Menu>
 
-    <Menu>
+    <!-- <Menu>
       <MenuLink text="CSS" />
       <MenuLink text="Javascript" />
       <MenuLink text="Node" />
@@ -41,7 +41,7 @@ async function handleSignOut() {
       <MenuLink text="Next JS" />
       <MenuLink text="Vue JS" />
       <MenuLink text="Nuxt JS" />
-    </Menu>
+    </Menu> -->
   </aside>
 </template>
 

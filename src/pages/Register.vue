@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { LogIn } from 'lucide-vue-next'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../lib/firebase'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { LogIn } from 'lucide-vue-next'
+
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { FirebaseError } from 'firebase/app'
+import { auth } from '../lib/firebase'
+import { handleSignUpError } from '../utils/handler-auth-errors'
 
 import Logo from '../components/Logo.vue'
 import Field from '../components/Field.vue'
 import Button from '../components/Button.vue'
+
+const isLoading = ref(false)
 
 const state = reactive({
   name: '',
@@ -18,6 +23,8 @@ const state = reactive({
 const router = useRouter()
 
 async function handleSubmit() {
+  isLoading.value = true
+
   try {
     const { name, email, password } = state
 
@@ -33,7 +40,12 @@ async function handleSubmit() {
 
     router.push('/dashboard')
   } catch (error) {
-    console.log(error)
+    if (error instanceof FirebaseError) {
+      const errorMessage = handleSignUpError(error.code)
+      alert(errorMessage)
+    }
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
@@ -58,7 +70,7 @@ async function handleSubmit() {
           required
         />
 
-        <Button type="submit">
+        <Button type="submit" :disabled="isLoading">
           <LogIn :size="20" />
           Crie sua conta agora
         </Button>
