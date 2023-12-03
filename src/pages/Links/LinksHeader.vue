@@ -8,6 +8,7 @@ import { db } from '@/lib/firebase'
 
 const route = useRoute()
 const folderData = ref<Folder | null>(null)
+const error = ref<string | null>(null)
 
 const dateTimeOptions: any = {
   year: 'numeric',
@@ -38,17 +39,22 @@ function handleBlur(event: Event) {
 }
 
 async function fetchFolderData(folderId: string) {
-  const folderRef = doc(db, 'folders', folderId)
-  const folder = await getDoc(folderRef)
+  try {
+    const folderRef = doc(db, 'folders', folderId)
+    const folder = await getDoc(folderRef)
 
-  if (!folder.exists()) {
-    return
-  }
+    if (!folder.exists()) {
+      return
+    }
 
-  folderData.value = {
-    id: folder.id,
-    name: folder.data().name,
-    createdAt: folder.data().createdAt.toDate(),
+    folderData.value = {
+      id: folder.id,
+      name: folder.data().name,
+      createdAt: folder.data().createdAt.toDate(),
+    }
+  } catch (err) {
+    console.error(err)
+    error.value = 'Não foi possível carregar os dados da pasta.'
   }
 }
 
@@ -66,6 +72,8 @@ onMounted(() => {
 </script>
 
 <template>
+  <span v-if="error" class="error-message" role="alert">{{ error }}</span>
+
   <header v-if="folderData" class="header">
     <h1
       contenteditable="true"
@@ -95,5 +103,9 @@ onMounted(() => {
     font-size: 1rem;
     color: var(--text-secondary);
   }
+}
+
+.error-message {
+  color: var(--text-danger);
 }
 </style>
