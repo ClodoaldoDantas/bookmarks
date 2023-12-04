@@ -1,25 +1,38 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-// import { useRoute } from 'vue-router'
+import { Link } from '@/interfaces/link'
 
-interface Link {
-  id: string
-  title: string
-  url: string
+interface Props {
+  items: Link[]
 }
 
-// const route = useRoute()
-const links = ref<Link[]>([])
-
-// TODO: fetch links by folderId
+const props = defineProps<Props>()
 </script>
 
 <template>
-  <ul>
-    <li v-for="link in links" :key="link.id">
-      <a :href="link.url" target="_blank" rel="noopener noreferrer">
+  <ul class="list">
+    <li v-for="link in props.items" :key="link.id">
+      <a
+        :href="link.url"
+        target="_blank"
+        class="link"
+        rel="noopener noreferrer"
+      >
         {{ link.title }}
       </a>
     </li>
   </ul>
 </template>
+
+<style lang="scss" scoped>
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.link {
+  display: inline-block;
+  color: var(--text-primary);
+  border-bottom: 1px dashed var(--text-secondary);
+}
+</style>

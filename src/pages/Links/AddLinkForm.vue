@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { addDoc, collection } from 'firebase/firestore'
+import { Timestamp, addDoc, collection } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { useRoute } from 'vue-router'
 
 import Field from '@/components/Field.vue'
 import Button from '@/components/Button.vue'
 
-const route = useRoute()
+const emit = defineEmits(['add'])
 
+const route = useRoute()
 const isLoading = ref(false)
 
 const state = reactive({
@@ -16,18 +17,29 @@ const state = reactive({
   url: '',
 })
 
+function resetForm() {
+  state.title = ''
+  state.url = ''
+}
+
 async function handleSubmit() {
   isLoading.value = true
 
   try {
-    await addDoc(collection(db, 'links'), {
+    const formData = {
       title: state.title,
       url: state.url,
       folderId: route.params.folderId,
+    }
+
+    const docRef = await addDoc(collection(db, 'links'), {
+      ...formData,
+      createdAt: Timestamp.fromDate(new Date()),
     })
 
-    state.title = ''
-    state.url = ''
+    resetForm()
+
+    emit('add', { id: docRef.id, ...formData })
   } catch (err) {
     console.error(err)
     alert('Não foi possível adicionar o link.')
@@ -56,7 +68,6 @@ async function handleSubmit() {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
 
   button {
     min-width: 150px;
