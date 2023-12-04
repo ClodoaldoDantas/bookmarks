@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import {
-  Unsubscribe,
   collection,
   onSnapshot,
   orderBy,
@@ -19,34 +18,28 @@ import FolderItem from './FolderItem.vue'
 const { user } = useUser()
 const folders = ref<Folder[]>([])
 
-let unsubscribe: Unsubscribe | null = null
+const q = query(
+  collection(db, 'folders'),
+  orderBy('createdAt', 'asc'),
+  where('authorId', '==', user.value?.uid)
+)
 
-onMounted(() => {
-  const q = query(
-    collection(db, 'folders'),
-    orderBy('createdAt', 'asc'),
-    where('authorId', '==', user.value?.uid)
-  )
+const unsub = onSnapshot(q, (querySnapshot) => {
+  const data: Folder[] = []
 
-  unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const data: Folder[] = []
-
-    querySnapshot.forEach((doc) => {
-      data.push({
-        id: doc.id,
-        name: doc.data().name,
-        createdAt: doc.data().createdAt.toDate(),
-      })
+  querySnapshot.forEach((doc) => {
+    data.push({
+      id: doc.id,
+      name: doc.data().name,
+      createdAt: doc.data().createdAt.toDate(),
     })
-
-    folders.value = data
   })
+
+  folders.value = data
 })
 
-onBeforeUnmount(() => {
-  if (unsubscribe) {
-    unsubscribe()
-  }
+watchEffect((onInvalidate) => {
+  onInvalidate(() => unsub())
 })
 </script>
 

@@ -28,11 +28,16 @@ async function handleCreateFolder() {
     return
   }
 
-  await addDoc(collection(db, 'folders'), {
-    name: folderName,
-    authorId: user.value?.uid,
-    createdAt: Timestamp.fromDate(new Date()),
-  })
+  try {
+    await addDoc(collection(db, 'folders'), {
+      name: folderName,
+      authorId: user.value?.uid,
+      createdAt: Timestamp.fromDate(new Date()),
+    })
+  } catch (err) {
+    console.error(err)
+    alert('Não foi possível criar a pasta.')
+  }
 }
 </script>
 

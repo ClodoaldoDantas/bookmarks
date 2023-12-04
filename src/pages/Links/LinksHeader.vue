@@ -108,4 +108,9 @@ onMounted(() => {
 .error-message {
   color: var(--text-danger);
 }
+
+.header,
+.error-message {
+  margin-bottom: 1rem;
+}
 </style>
