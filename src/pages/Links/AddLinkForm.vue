@@ -67,10 +67,15 @@ async function handleSubmit() {
 .form {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
 
+  input {
+    flex: 1 1 230px;
+  }
+
   button {
-    min-width: 150px;
+    flex: 0 0 150px;
   }
 }
 </style>
