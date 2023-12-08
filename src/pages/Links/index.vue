@@ -15,11 +15,16 @@ import {
   where,
 } from 'firebase/firestore'
 
+import Loader from '@/components/Loader.vue'
 import FolderInfo from './FolderInfo.vue'
 import AddLinkForm from './AddLinkForm.vue'
 import LinksGrid from './LinksGrid.vue'
 
 const route = useRoute()
+
+const isLoading = ref(false)
+const error = ref<string | null>(null)
+
 const links = ref<Link[]>([])
 const folder = ref<Folder | null>(null)
 
@@ -41,8 +46,8 @@ async function fetchFolderData(folderId: string) {
       name: data.data().name,
       createdAt: data.data().createdAt.toDate(),
     }
-  } catch (err) {
-    console.error(err)
+  } catch {
+    throw new Error('Não foi possível buscar as informações pasta')
   }
 }
 
@@ -67,8 +72,22 @@ async function fetchLinks(folderId: string) {
     })
 
     links.value = linksData
+  } catch {
+    throw new Error('Não foi possível buscar os links')
+  }
+}
+
+async function fetchData(id: string) {
+  isLoading.value = true
+
+  try {
+    await Promise.all([fetchFolderData(id), fetchLinks(id)])
   } catch (err) {
-    console.error(err)
+    if (err instanceof Error) {
+      error.value = err.message
+    }
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -76,18 +95,26 @@ watch(
   () => route.params.folderId,
   async (newId) => {
     const folderId = newId as string
-    Promise.all([fetchFolderData(folderId), fetchLinks(folderId)])
+    await fetchData(folderId)
   }
 )
 
-onMounted(() => {
+onMounted(async () => {
   const folderId = route.params.folderId as string
-  Promise.all([fetchFolderData(folderId), fetchLinks(folderId)])
+  await fetchData(folderId)
 })
 </script>
 
 <template>
-  <div class="container">
+  <div v-if="isLoading" class="center">
+    <Loader />
+  </div>
+
+  <div v-else-if="error" class="container">
+    <span class="error" role="alert">{{ error }}</span>
+  </div>
+
+  <div v-else class="container">
     <header v-if="folder" class="header">
       <FolderInfo :folder="folder" />
       <AddLinkForm @add="addLink" />
@@ -106,5 +133,18 @@ onMounted(() => {
 .container {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.center {
+  height: 100%;
+  width: calc(100% - 240px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  color: var(--text-danger);
 }
 </style>
