@@ -1,31 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
-import Login from './pages/Login/index.vue'
-import Register from './pages/Register/index.vue'
-import Dashboard from './pages/Dashboard/index.vue'
-import Account from './pages/Account/index.vue'
-import Links from './pages/Links/index.vue'
-
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from './lib/firebase'
 
 const routes = [
-  { path: '/', component: Login },
-  { path: '/signup', component: Register },
+  { path: '/', component: () => import('./pages/Login/index.vue') },
+  { path: '/signup', component: () => import('./pages/Register/index.vue') },
   {
     path: '/dashboard',
-    component: Dashboard,
+    component: () => import('./pages/Dashboard/index.vue'),
     meta: {
       requiresAuth: true,
     },
     children: [
       {
         path: 'account',
-        component: Account,
+        component: () => import('./pages/Account/index.vue'),
       },
       {
         path: ':folderId',
-        component: Links,
+        component: () => import('./pages/Links/index.vue'),
       },
     ],
   },
