@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useUser } from '@/composables/useUser'
-
-import { updateProfile } from 'firebase/auth'
+import { User, updateProfile } from 'firebase/auth'
 
 import Field from '@/components/Field.vue'
 import Button from '@/components/Button.vue'
@@ -20,7 +19,7 @@ async function handleSubmit() {
   message.value = null
 
   try {
-    await updateProfile(user.value, {
+    await updateProfile(user.value as User, {
       displayName: name.value,
       photoURL: photoURL.value,
     })
@@ -44,14 +43,20 @@ async function handleSubmit() {
     <form @submit.prevent="handleSubmit()" class="account-form">
       <span class="message" v-if="message">{{ message }}</span>
 
-      <Field
-        type="text"
-        placeholder="Nome do Usuário"
-        v-model="name"
-        required
-      />
+      <div class="account-form-group">
+        <label for="display-name">Nome do Usuário</label>
+        <Field type="text" id="display-name" v-model="name" required />
+      </div>
 
-      <Field type="url" placeholder="URL da foto" v-model="photoURL" />
+      <div class="account-form-group">
+        <label for="profile-photo">Foto do Perfil</label>
+        <Field
+          type="url"
+          id="profile-photo"
+          placeholder="URL da imagem"
+          v-model="photoURL"
+        />
+      </div>
 
       <Button type="submit" :disabled="isLoading">Atualizar informações</Button>
     </form>
@@ -80,6 +85,17 @@ async function handleSubmit() {
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
+}
+
+.account-form-group {
+  width: 100%;
+
+  label {
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+  }
 }
 
 .message {
