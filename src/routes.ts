@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from './pages/Login/index.vue'
 import Register from './pages/Register/index.vue'
 import Dashboard from './pages/Dashboard/index.vue'
+import Account from './pages/Account/index.vue'
 import Links from './pages/Links/index.vue'
 
 import { onAuthStateChanged } from 'firebase/auth'
@@ -18,6 +19,10 @@ const routes = [
       requiresAuth: true,
     },
     children: [
+      {
+        path: 'account',
+        component: Account,
+      },
       {
         path: ':folderId',
         component: Links,

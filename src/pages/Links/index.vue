@@ -130,10 +130,6 @@ onMounted(async () => {
 .header {
   margin-bottom: 2rem;
 }
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
 
 .center {
   height: 100%;

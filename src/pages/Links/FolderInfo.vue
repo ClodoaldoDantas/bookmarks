@@ -53,7 +53,7 @@ function handleBlur(event: Event) {
       {{ props.folder.name }}
     </h1>
 
-    <span> Criado em {{ dateFormatted }}</span>
+    <span>Criado em {{ dateFormatted }}</span>
   </div>
 </template>
 

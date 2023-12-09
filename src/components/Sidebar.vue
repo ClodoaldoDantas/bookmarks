@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FolderPlus, LogOut } from 'lucide-vue-next'
+import { FolderPlus, LogOut, Settings } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 
 import { signOut } from 'firebase/auth'
@@ -39,6 +39,10 @@ async function handleCreateFolder() {
     alert('Não foi possível criar a pasta.')
   }
 }
+
+function handleNavigateToAccount() {
+  router.push('/dashboard/account')
+}
 </script>
 
 <template>
@@ -46,6 +50,11 @@ async function handleCreateFolder() {
     <Profile />
 
     <Menu>
+      <MenuButton @click="handleNavigateToAccount()">
+        <Settings :size="18" />
+        Minha Conta
+      </MenuButton>
+
       <MenuButton @click="handleSignOut()">
         <LogOut :size="18" />
         Sair da Conta

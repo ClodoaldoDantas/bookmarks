@@ -7,7 +7,9 @@ const { user } = useUser()
 
 <template>
   <div v-if="user" class="profile">
-    <UserCircle :size="24" />
+    <img class="profile-photo" v-if="user.photoURL" :src="user.photoURL" />
+    <UserCircle v-else :size="24" />
+
     <span>{{ user.displayName }}</span>
   </div>
 </template>
@@ -23,5 +25,12 @@ const { user } = useUser()
   span {
     font-size: 0.875rem;
   }
+}
+
+.profile-photo {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 </style>
