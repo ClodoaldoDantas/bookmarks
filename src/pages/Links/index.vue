@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { Link } from '@/interfaces/link'
-import { Folder } from '@/interfaces/folder'
-
-import { db } from '@/lib/firebase'
 import {
   collection,
   doc,
@@ -15,10 +11,14 @@ import {
   where,
 } from 'firebase/firestore'
 
+import { Link } from '@/interfaces/link'
+import { Folder } from '@/interfaces/folder'
+import { db } from '@/lib/firebase'
+
 import Loader from '@/components/Loader.vue'
-import FolderInfo from './FolderInfo.vue'
-import AddLinkForm from './AddLinkForm.vue'
-import LinksGrid from './LinksGrid.vue'
+import FolderInfo from './components/FolderInfo.vue'
+import AddLinkForm from './components/AddLinkForm.vue'
+import LinksGrid from './components/LinksGrid.vue'
 
 const route = useRoute()
 
@@ -133,7 +133,7 @@ onMounted(async () => {
 
 .center {
   height: 100%;
-  width: calc(100% - 240px);
+  width: 100%;
 
   display: flex;
   justify-content: center;
