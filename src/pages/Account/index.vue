@@ -10,11 +10,14 @@ import Button from '@/components/Button.vue'
 const { user } = useUser()
 
 const isLoading = ref(false)
+const message = ref<string | null>(null)
+
 const name = ref(user.value?.displayName ?? '')
 const photoURL = ref(user.value?.photoURL ?? '')
 
 async function handleSubmit() {
   isLoading.value = true
+  message.value = null
 
   try {
     await updateProfile(user.value, {
@@ -22,8 +25,7 @@ async function handleSubmit() {
       photoURL: photoURL.value,
     })
 
-    // TODO: adicionar um toast de sucesso
-    console.log('Perfil atualizado com sucesso!')
+    message.value = 'Perfil atualizado com sucesso!'
   } catch (err) {
     alert('Não foi possível atualizar as informações da conta.')
   } finally {
@@ -40,6 +42,8 @@ async function handleSubmit() {
     </header>
 
     <form @submit.prevent="handleSubmit()" class="account-form">
+      <span class="message" v-if="message">{{ message }}</span>
+
       <Field
         type="text"
         placeholder="Nome do Usuário"
@@ -76,5 +80,9 @@ async function handleSubmit() {
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
+}
+
+.message {
+  color: var(--text-success);
 }
 </style>
