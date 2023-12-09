@@ -1,18 +1,12 @@
-# Vue 3 + TypeScript + Vite
+## 🔖 Bookmarks
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+![screenshot-localhost_5173-2023 12 08-20_43_01](https://github.com/ClodoaldoDantas/bookmarks/assets/32376905/79a29795-574a-4425-b6b0-a541885f3a25)
 
-## Recommended IDE Setup
+ ### 💻 Como executar o projeto
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support For `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+1. Certifique-se de ter o Node instalado na sua máquina.
+2. Clone o repositório.
+3. Navegue até o diretório raiz do projeto.
+4. Execute o comando `npm install` para instalar as dependências do projeto.
+5. Execute o comando `npm run dev` para iniciar o servidor de desenvolvimento.
+6. Acesse o projeto em seu navegador através do endereço `http://localhost:5173`.
