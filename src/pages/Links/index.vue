@@ -32,6 +32,10 @@ function addLink(link: Link) {
   links.value.push(link)
 }
 
+function removeLink({ id }: { id: string }) {
+  links.value = links.value.filter((link) => link.id !== id)
+}
+
 async function fetchFolderData(folderId: string) {
   try {
     const folderRef = doc(db, 'folders', folderId)
@@ -121,7 +125,7 @@ onMounted(async () => {
     </header>
 
     <section>
-      <LinksGrid :items="links" />
+      <LinksGrid :items="links" @remove="removeLink" />
     </section>
   </div>
 </template>

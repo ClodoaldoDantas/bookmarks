@@ -1,11 +1,24 @@
 <script lang="ts" setup>
 import { Link } from '@/interfaces/link'
+import { db } from '@/lib/firebase'
+import { deleteDoc, doc } from 'firebase/firestore'
+import { Trash2 } from 'lucide-vue-next'
 
 interface Props {
   items: Link[]
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits(['remove'])
+
+async function handleDeleteLink(id: string) {
+  try {
+    await deleteDoc(doc(db, 'links', id))
+    emit('remove', { id })
+  } catch {
+    alert('Não foi possível deletar o link')
+  }
+}
 </script>
 
 <template>
@@ -23,6 +36,14 @@ const props = defineProps<Props>()
           {{ link.url }}
         </a>
       </div>
+
+      <button
+        @click="handleDeleteLink(link.id)"
+        class="delete-button"
+        type="button"
+      >
+        <Trash2 :size="20" />
+      </button>
     </li>
   </ul>
 </template>
@@ -35,6 +56,8 @@ const props = defineProps<Props>()
 }
 
 .list-item {
+  position: relative;
+
   padding: 1.5rem;
   background-color: var(--card);
   border-radius: 0.25rem;
@@ -57,6 +80,23 @@ const props = defineProps<Props>()
     &:hover {
       color: var(--text-primary);
     }
+  }
+}
+
+.delete-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+
+  background-color: transparent;
+  border: none;
+  color: var(--text-secondary);
+
+  cursor: pointer;
+  transition: all 150ms;
+
+  &:hover {
+    color: var(--text-primary);
   }
 }
 </style>
