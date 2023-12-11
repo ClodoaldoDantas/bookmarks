@@ -2,10 +2,9 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { LogIn } from 'lucide-vue-next'
-
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
-import { auth } from '@/lib/firebase'
+
+import { authService } from '@/services/auth'
 import { handleSignUpError } from '@/utils/handler-auth-errors'
 
 import Logo from '@/components/Logo.vue'
@@ -26,16 +25,10 @@ async function handleSubmit() {
   isLoading.value = true
 
   try {
-    const { name, email, password } = state
-
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    )
-
-    await updateProfile(userCredential.user, {
-      displayName: name,
+    await authService.register({
+      name: state.name,
+      email: state.email,
+      password: state.password,
     })
 
     router.push('/dashboard')
