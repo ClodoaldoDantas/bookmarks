@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Save, Image } from 'lucide-vue-next'
-import { User, updateProfile } from 'firebase/auth'
-import {
-  getDownloadURL,
-  ref as storageRef,
-  uploadBytes,
-} from 'firebase/storage'
+import { User } from 'firebase/auth'
+import { toast } from 'vue3-toastify'
 
 import { useUser } from '@/composables/useUser'
-import { storage } from '@/lib/firebase'
+import { authService } from '@/services/auth'
 
 import Field from '@/components/Field.vue'
 import Button from '@/components/Button.vue'
@@ -25,24 +21,15 @@ const name = ref(user.value?.displayName ?? '')
 const photoURL = ref(user.value?.photoURL ?? null)
 const email = ref(user.value?.email ?? '')
 
-function showMessage() {
-  message.value = 'Perfil atualizado com sucesso!'
-
-  setTimeout(() => {
-    message.value = null
-  }, 2000)
-}
-
 async function handleSubmit() {
   isLoading.value = true
   message.value = null
 
   try {
-    await updateProfile(user.value as User, { displayName: name.value })
-
-    showMessage()
+    await authService.updateUserName(user.value as User, name.value)
+    toast.success('Perfil atualizado com sucesso!')
   } catch (err) {
-    alert('Não foi possível atualizar as informações da conta.')
+    toast.error('Não foi possível atualizar as informações da conta.')
   } finally {
     isLoading.value = false
   }
@@ -59,22 +46,15 @@ async function handleUploadImage() {
 
   if (!file) return
 
-  const imageRef = storageRef(storage, `users/${user.value?.uid}/${file.name}`)
-
   try {
     uploadIsLoading.value = true
 
-    const snapshot = await uploadBytes(imageRef, file)
-    const fullPath = snapshot.ref.fullPath
-
-    const imageUrl = await getDownloadURL(storageRef(storage, fullPath))
-
-    await updateProfile(user.value as User, { photoURL: imageUrl })
+    const { imageUrl } = await authService.uploadImage(user.value as User, file)
     photoURL.value = imageUrl
 
-    showMessage()
+    toast.success('Perfil atualizado com sucesso!')
   } catch {
-    alert('Não foi possível atualizar a foto de perfil.')
+    toast.error('Não foi possível atualizar a foto de perfil.')
   } finally {
     uploadIsLoading.value = false
     fileInput.value = ''

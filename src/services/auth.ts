@@ -1,10 +1,13 @@
 import {
+  User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
 } from 'firebase/auth'
 
-import { auth } from '@/lib/firebase'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+
+import { auth, storage } from '@/lib/firebase'
 
 interface RegisterParams {
   name: string
@@ -27,5 +30,24 @@ export const authService = {
 
   login: async ({ email, password }: LoginParams) => {
     await signInWithEmailAndPassword(auth, email, password)
+  },
+
+  updateUserName: async (user: User, name: string) => {
+    await updateProfile(user, { displayName: name })
+  },
+
+  uploadImage: async (user: User, file: File) => {
+    const imageRef = ref(storage, `users/${user.uid}/${file.name}`)
+
+    const snapshot = await uploadBytes(imageRef, file)
+    const fullPath = snapshot.ref.fullPath
+
+    const imageUrl = await getDownloadURL(ref(storage, fullPath))
+
+    await updateProfile(user, { photoURL: imageUrl })
+
+    return {
+      imageUrl,
+    }
   },
 }
