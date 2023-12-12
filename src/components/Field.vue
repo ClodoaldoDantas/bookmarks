@@ -34,5 +34,11 @@ const handleInput = (event: Event) => {
   &::placeholder {
     color: var(--text-secondary);
   }
+
+  &:disabled {
+    opacity: 0.7;
+    color: var(--text-secondary);
+    cursor: not-allowed;
+  }
 }
 </style>
