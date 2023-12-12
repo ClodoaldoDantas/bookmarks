@@ -3,9 +3,8 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { LogIn } from 'lucide-vue-next'
 
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
-import { auth } from '@/lib/firebase'
+import { authService } from '@/services/auth'
 import { handleSignInError } from '@/utils/handler-auth-errors'
 
 import Logo from '@/components/Logo.vue'
@@ -25,8 +24,10 @@ async function handleSubmit() {
   isLoading.value = true
 
   try {
-    const { email, password } = state
-    await signInWithEmailAndPassword(auth, email, password)
+    await authService.login({
+      email: state.email,
+      password: state.password,
+    })
 
     router.push('/dashboard')
   } catch (error) {
