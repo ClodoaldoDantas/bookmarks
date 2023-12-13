@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { Link } from '@/interfaces/link'
-import { db } from '@/lib/firebase'
-import { deleteDoc, doc } from 'firebase/firestore'
 import { Trash2 } from 'lucide-vue-next'
+import { Link } from '@/interfaces/link'
+import { linkService } from '@/services/link'
 
 interface Props {
   items: Link[]
@@ -13,7 +12,7 @@ const emit = defineEmits(['remove'])
 
 async function handleDeleteLink(id: string) {
   try {
-    await deleteDoc(doc(db, 'links', id))
+    await linkService.delete(id)
     emit('remove', { id })
   } catch {
     alert('Não foi possível deletar o link')

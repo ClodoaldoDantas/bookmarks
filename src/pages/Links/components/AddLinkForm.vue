@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { Timestamp, addDoc, collection } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
 import { useRoute } from 'vue-router'
+import { linkService } from '@/services/link'
 
 import Field from '@/components/Field.vue'
 import Button from '@/components/Button.vue'
@@ -29,17 +28,13 @@ async function handleSubmit() {
     const formData = {
       title: state.title,
       url: state.url,
-      folderId: route.params.folderId,
+      folderId: route.params.folderId as string,
     }
 
-    const docRef = await addDoc(collection(db, 'links'), {
-      ...formData,
-      createdAt: Timestamp.fromDate(new Date()),
-    })
-
-    resetForm()
+    const docRef = await linkService.create(formData)
 
     emit('add', { id: docRef.id, ...formData })
+    resetForm()
   } catch (err) {
     console.error(err)
     alert('Não foi possível adicionar o link.')
