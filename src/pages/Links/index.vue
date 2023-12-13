@@ -36,6 +36,14 @@ function removeLink({ id }: { id: string }) {
   links.value = links.value.filter((link) => link.id !== id)
 }
 
+function updateFolder(name: string) {
+  if (!folder.value) {
+    return
+  }
+
+  folder.value.name = name
+}
+
 async function fetchFolderData(folderId: string) {
   try {
     const folderRef = doc(db, 'folders', folderId)
@@ -120,7 +128,7 @@ onMounted(async () => {
 
   <div v-else class="container">
     <header v-if="folder" class="header">
-      <FolderInfo :folder="folder" />
+      <FolderInfo :folder="folder" @update-folder="updateFolder" />
       <AddLinkForm @add="addLink" />
     </header>
 

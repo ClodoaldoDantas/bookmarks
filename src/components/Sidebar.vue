@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { FolderPlus, LogOut, Settings } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
-
+import { toast } from 'vue3-toastify'
 import { signOut } from 'firebase/auth'
-import { Timestamp, addDoc, collection } from 'firebase/firestore'
 
-import { auth, db } from '@/lib/firebase'
+import { auth } from '@/lib/firebase'
 import { useUser } from '@/composables/useUser'
+import { folderService } from '@/services/folder'
 
 import Profile from './Profile.vue'
 import Menu from './Menu.vue'
@@ -29,14 +29,13 @@ async function handleCreateFolder() {
   }
 
   try {
-    await addDoc(collection(db, 'folders'), {
+    await folderService.create({
       name: folderName,
-      authorId: user.value?.uid,
-      createdAt: Timestamp.fromDate(new Date()),
+      authorId: user.value!.uid,
     })
   } catch (err) {
     console.error(err)
-    alert('Não foi possível criar a pasta.')
+    toast.error('Não foi possível criar a pasta.')
   }
 }
 
