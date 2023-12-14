@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FolderPlus, LogOut, Settings } from 'lucide-vue-next'
+import { Plus, LogOut, Settings } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { signOut } from 'firebase/auth'
@@ -58,12 +58,19 @@ function handleNavigateToAccount() {
         <LogOut :size="18" />
         Sair da Conta
       </MenuButton>
-
-      <MenuButton @click="handleCreateFolder()">
-        <FolderPlus :size="18" />
-        Nova Pasta
-      </MenuButton>
     </Menu>
+
+    <div class="add-folder">
+      <span>Pastas</span>
+
+      <button
+        type="button"
+        @click="handleCreateFolder()"
+        aria-label="Nova Pasta"
+      >
+        <Plus :size="18" />
+      </button>
+    </div>
 
     <FolderList />
   </aside>
@@ -73,9 +80,28 @@ function handleNavigateToAccount() {
 .sidebar {
   background-color: var(--card);
   box-shadow: rgba(255, 255, 255, 0.05) -1px 0px 0px 0px inset;
+}
 
-  nav + nav {
-    margin-top: 2rem;
+.add-folder {
+  margin: 2rem 0.75rem 0.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  span {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  button {
+    border: 0;
+    background-color: transparent;
+    color: var(--text-secondary);
+
+    &:hover {
+      color: var(--text-primary);
+    }
   }
 }
 </style>
