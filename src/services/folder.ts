@@ -2,6 +2,7 @@ import {
   Timestamp,
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   updateDoc,
@@ -42,5 +43,9 @@ export const folderService = {
       name: data.data().name,
       createdAt: data.data().createdAt.toDate(),
     }
+  },
+
+  delete: async (id: string) => {
+    await deleteDoc(doc(db, 'folders', id))
   },
 }

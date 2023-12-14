@@ -93,7 +93,11 @@ onMounted(async () => {
 
   <div v-else class="container">
     <header v-if="folder" class="header">
-      <FolderInfo :folder="folder" @update-folder="updateFolder" />
+      <FolderInfo
+        :folder="folder"
+        :hasLinks="links.length > 0"
+        @update-folder="updateFolder"
+      />
       <AddLinkForm @add="addLink" />
     </header>
 

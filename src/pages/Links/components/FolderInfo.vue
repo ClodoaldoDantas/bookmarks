@@ -7,6 +7,8 @@ import { Folder } from '@/interfaces/folder'
 import { folderService } from '@/services/folder'
 
 import FolderInput from './FolderInput.vue'
+import { Trash2 } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
 
 const emit = defineEmits<{
   (event: 'updateFolder', payload: string): void
@@ -20,8 +22,10 @@ const dateTimeOptions: any = {
 
 interface Props {
   folder: Folder
+  hasLinks: boolean
 }
 
+const router = useRouter()
 const props = defineProps<Props>()
 
 const folderName = ref(props.folder.name)
@@ -30,6 +34,26 @@ const isEditing = ref(false)
 const dateFormatted = computed(() => {
   return props.folder.createdAt.toLocaleDateString('pt-BR', dateTimeOptions)
 })
+
+async function handleRemoveFolder() {
+  if (props.hasLinks) {
+    toast.error('Remova os links antes de remover a pasta')
+    return
+  }
+
+  const confirm = window.confirm('Tem certeza que deseja remover esta pasta?')
+
+  if (!confirm) {
+    return
+  }
+
+  try {
+    await folderService.delete(props.folder.id)
+    router.push('/dashboard')
+  } catch {
+    toast.error('Não foi possível remover a pasta')
+  }
+}
 
 function handleEditFolder() {
   isEditing.value = true
@@ -74,9 +98,25 @@ function updateFolderName(name: string) {
 
       <h1 v-else>{{ folderName }}</h1>
 
-      <button v-show="!isEditing" type="button" @click="handleEditFolder()">
-        <Edit :size="20" />
-      </button>
+      <div class="folder-info__actions">
+        <button
+          v-show="!isEditing"
+          type="button"
+          aria-label="Editar Pasta"
+          @click="handleEditFolder()"
+        >
+          <Edit :size="20" />
+        </button>
+
+        <button
+          v-show="!isEditing"
+          type="button"
+          aria-label="Remover Pasta"
+          @click="handleRemoveFolder()"
+        >
+          <Trash2 :size="20" />
+        </button>
+      </div>
     </div>
 
     <span>Criado em {{ dateFormatted }}</span>
@@ -120,6 +160,11 @@ function updateFolderName(name: string) {
         color: var(--text-primary);
       }
     }
+  }
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   h1 {
