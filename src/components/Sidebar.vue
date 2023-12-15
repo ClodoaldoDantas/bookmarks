@@ -2,11 +2,10 @@
 import { Plus, LogOut, Settings } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
-import { signOut } from 'firebase/auth'
 
-import { auth } from '@/lib/firebase'
 import { useUser } from '@/composables/useUser'
 import { folderService } from '@/services/folder'
+import { authService } from '@/services/auth'
 
 import Profile from './Profile.vue'
 import Menu from './Menu.vue'
@@ -17,7 +16,7 @@ const router = useRouter()
 const { user } = useUser()
 
 async function handleSignOut() {
-  await signOut(auth)
+  await authService.logout()
   router.replace('/')
 }
 
