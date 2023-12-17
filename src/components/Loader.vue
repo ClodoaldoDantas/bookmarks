@@ -1,5 +1,7 @@
 <template>
-  <span class="loader"></span>
+  <div class="loader" role="status">
+    <span class="sr-only">Carregando...</span>
+  </div>
 </template>
 
 <style lang="scss" scoped>

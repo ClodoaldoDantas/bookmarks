@@ -2,6 +2,7 @@ import {
   User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
   updateProfile,
 } from 'firebase/auth'
 
@@ -49,5 +50,9 @@ export const authService = {
     return {
       imageUrl,
     }
+  },
+
+  logout: async () => {
+    await signOut(auth)
   },
 }
