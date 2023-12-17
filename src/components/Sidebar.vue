@@ -33,7 +33,6 @@ async function handleCreateFolder() {
       authorId: user.value!.uid,
     })
   } catch (err) {
-    console.error(err)
     toast.error('Não foi possível criar a pasta.')
   }
 }
